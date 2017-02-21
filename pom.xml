@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<artifactId>cms-indexing-keydef</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<name>${project.artifactId}-${project.version}</name>
+	<url>http://www.simonsoft.se/</url>
+	
+	<parent>
+		<groupId>se.simonsoft</groupId>
+		<artifactId>cms-maven-parent</artifactId>
+		<version>4.1.0</version>
+		<relativePath/>
+	</parent>
+
+	<repositories>
+		<repository>
+			<id>repos.open.repo</id>
+			<name>Repos Open Repository</name>
+			<url>http://opensource.simonsoft.se/maven/</url>
+		</repository>	
+	</repositories>
+	
+	<properties>
+		<solr-version>4.7.2</solr-version>
+	</properties>	
+	
+	<dependencies>
+		<dependency>
+			<groupId>se.repos</groupId>
+			<artifactId>repos-indexing</artifactId>
+			<version>0.12.3</version>
+		</dependency>
+		<dependency>
+			<groupId>se.simonsoft</groupId>
+			<artifactId>cms-xmlsource</artifactId>
+			<version>0.17.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jdom2</artifactId>
+					<groupId>org.jdom</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>	
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-xmp</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<!-- logging backend for unit tests: log debug and above to console, no need for config file -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*.txt</exclude>
+						<exclude>LICENSE</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/resources/se/simonsoft/cms/indexing/xml/solr/reposxml/conf/velocity/*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>
