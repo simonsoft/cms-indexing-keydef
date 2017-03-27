@@ -15,7 +15,6 @@
  */
 package se.simonsoft.cms.indexing.keydef;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -23,7 +22,6 @@ import org.junit.Test;
 import se.repos.indexing.IndexingDoc;
 import se.repos.indexing.item.IndexingItemProgress;
 import se.repos.indexing.item.IndexingItemStandalone;
-import se.simonsoft.cms.indexing.keydef.HandlerKeydef;
 
 public class HandlerKeydefTest {
 
@@ -34,18 +32,18 @@ public class HandlerKeydefTest {
 	
 	@Test
 	public void testExcel1() {
-		HandlerKeydef keydef = new HandlerKeydef();
+		HandlerKeydefExcel keydef = new HandlerKeydefExcel();
 
 		IndexingItemProgress item = new IndexingItemStandalone("Techdata1.xlsx");
-		item.getFields().addField("prop_cms.class", "keydef");
+		item.getFields().addField("prop_cms.class", "keydefmap");
 		item.getFields().addField("pathext", "xlsx");
 		
 		keydef.handle(item);
 		IndexingDoc fields = item.getFields();
 
-		assertTrue("Should extract text", fields.containsKey("rel_tf_keydef"));
+		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
 
 		
-		assertTrue("Calculated cell", ((String)fields.getFieldValue("rel_tf_keydef")).contains("<td>10.24</td>"));
+		assertTrue("Calculated cell", ((String)fields.getFieldValue("rel_tf_keydefmap")).contains("<td>10.24</td>"));
 	}
 }

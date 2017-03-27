@@ -15,47 +15,57 @@
  */
 package se.simonsoft.cms.indexing.keydef;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import se.repos.indexing.IndexingDoc;
 import se.repos.indexing.IndexingItemHandler;
 import se.repos.indexing.item.IndexingItemProgress;
+import se.simonsoft.cms.xmlsource.transform.TransformOptions;
 
-public class HandlerKeydef implements IndexingItemHandler {
+public abstract class HandlerKeydef {
 	
-	private static final String FIELD_KEYDEF = "rel_tf_keydef"; // Temporary field until changing the schema.
+	public static final String FIELD_KEYDEF = "rel_tf_keydefmap"; // Temporary field until changing the schema.
 
 	public HandlerKeydef() {
 
 	}
 
 	
-	@Override
-	public void handle(IndexingItemProgress progress) {
+	public static boolean isClass(IndexingDoc f, String name) {
 		
-		IndexingDoc f = progress.getFields();
-		String result = null;
-		
-		String ext = (String) f.getFieldValue("pathext");
 		String itemClass = (String) f.getFieldValue("prop_cms.class");
-		if (itemClass == null || !itemClass.contains("keydef")) {
-			return;
+		if (itemClass == null) {
+			return false;
 		}
+		String[] a = itemClass.split(" ");
 		
-		if (/*"xls".equals(ext) || */"xlsx".equals(ext)) {
-			KeydefExcel xl = new KeydefExcel(progress.getContents());
-			
-			result = xl.transform();
-			
-		}
-		if (result != null) {
-			progress.getFields().addField(FIELD_KEYDEF, result);
-		}
-		
-		
+		return Arrays.asList(a).contains(name);
 	}
 	
-	@Override
+	public static TransformOptions getTransformOptions(IndexingDoc f) {
+		
+		TransformOptions o = new TransformOptions();
+		
+		if (f.containsKey("patharea")) {
+			String patharea = (String) f.getFieldValue("patharea");
+			o.setParameter("patharea", patharea);
+		}
+		if (f.containsKey("prop_abx.TranslationLocale")) {
+			String locale = (String) f.getFieldValue("prop_abx.TranslationLocale");
+			o.setParameter("locale", locale);
+		}
+		
+		
+		if (f.containsKey("prop_keydefmap.prefix")) {
+			String prefix = (String) f.getFieldValue("prop_keydefmap.prefix");
+			o.setParameter("prefix", prefix);
+		}
+			
+		return o;
+	}
+	
+	//@Override
 	public Set<Class<? extends IndexingItemHandler>> getDependencies() {
 		// TODO Auto-generated method stub
 		return null;
