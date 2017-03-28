@@ -57,7 +57,7 @@ public class HandlerKeydefExcel implements IndexingItemHandler {
 		
 		IndexingDoc f = progress.getFields();
 		
-		if (!HandlerKeydef.isClass(f, "keydefmap")) {
+		if (!HandlerKeydef.isCmsClass(f, "keydefmap")) {
 			return;
 		}
 		

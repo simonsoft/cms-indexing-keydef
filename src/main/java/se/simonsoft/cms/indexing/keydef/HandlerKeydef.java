@@ -32,7 +32,7 @@ public abstract class HandlerKeydef {
 	}
 
 	
-	public static boolean isClass(IndexingDoc f, String name) {
+	public static boolean isCmsClass(IndexingDoc f, String name) {
 		
 		String itemClass = (String) f.getFieldValue("prop_cms.class");
 		if (itemClass == null) {
