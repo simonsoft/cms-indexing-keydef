@@ -34,7 +34,7 @@ public class HandlerKeydefTest {
 	public void testExcel1() {
 		HandlerKeydefExcel keydef = new HandlerKeydefExcel();
 
-		IndexingItemProgress item = new IndexingItemStandalone("Techdata1.xlsx");
+		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1.xlsx");
 		item.getFields().addField("prop_cms.class", "keydefmap");
 		item.getFields().addField("pathext", "xlsx");
 		
