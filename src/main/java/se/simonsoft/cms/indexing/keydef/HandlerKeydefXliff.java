@@ -67,7 +67,7 @@ public class HandlerKeydefXliff implements IndexingItemHandler {
 		
 		String name = (String) f.getFieldValue("pathname");
 		String ext = (String) f.getFieldValue("pathext");
-		if (!("xlf".equals(ext) || "xliff".equals(ext))) {
+		if (!("xlf".equals(ext))) {
 			return;
 		}
 		
