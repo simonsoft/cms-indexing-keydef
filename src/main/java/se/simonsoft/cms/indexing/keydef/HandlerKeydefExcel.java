@@ -21,7 +21,12 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Set;
 
+import javax.inject.Inject;
+import javax.xml.transform.stream.StreamSource;
+
+import net.sf.saxon.s9api.BuildingContentHandler;
 import net.sf.saxon.s9api.DocumentBuilder;
+import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.TikaInputStream;
@@ -40,16 +45,27 @@ import se.repos.indexing.IndexingItemHandler;
 import se.repos.indexing.item.IndexingItemProgress;
 import se.simonsoft.cms.xmlsource.handler.XmlNotWellFormedException;
 import se.simonsoft.cms.xmlsource.handler.s9api.XmlSourceDocumentS9api;
+import se.simonsoft.cms.xmlsource.handler.s9api.XmlSourceElementS9api;
 import se.simonsoft.cms.xmlsource.handler.s9api.XmlSourceReaderS9api;
 import se.simonsoft.cms.xmlsource.transform.TransformOptions;
 import se.simonsoft.cms.xmlsource.transform.TransformerService;
+import se.simonsoft.cms.xmlsource.transform.TransformerServiceFactory;
 
 public class HandlerKeydefExcel implements IndexingItemHandler {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HandlerKeydefExcel.class);
 	
-	//private final XmlSourceReaderS9api sourceReader;
-	//private final TransformerService transformerServiceXliff12;
+	private final XmlSourceReaderS9api sourceReader;
+	private final DocumentBuilder db;
+	private final TransformerService transformerService;
+
+	@Inject
+	public HandlerKeydefExcel(XmlSourceReaderS9api sourceReader, TransformerServiceFactory transformerServiceFactory) {
+		
+		this.sourceReader = sourceReader;
+		this.db = sourceReader.getProcessor().newDocumentBuilder();
+		this.transformerService = transformerServiceFactory.buildTransformerService(new StreamSource(this.getClass().getClassLoader().getResourceAsStream("se/simonsoft/cms/indexing/keydef/excel.xsl")));
+	}
 
 
 	@Override
@@ -73,50 +89,49 @@ public class HandlerKeydefExcel implements IndexingItemHandler {
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		
 		
-		/*
 		TransformOptions transformOptions = HandlerKeydef.getTransformOptions(f);
 		try {
-			XmlSourceDocumentS9api xmlDoc = sourceReader.read(is);
-			transformerServiceXliff12.transform(xmlDoc, new OutputStreamWriter(result), transformOptions);
+			//String test = parseToHTML(is);
+			//System.out.println(test);
+			//is = progress.getContents();
+			
+			XmlSourceDocumentS9api xmlDoc = parseToSaxonTree(is);
+			
+			transformerService.transform(xmlDoc, new OutputStreamWriter(result), transformOptions);
+			System.out.println("Transformed result:");
+			System.out.println(result.toString());
 			
 		} catch (XmlNotWellFormedException e) { 
 			String msg = MessageFormatter.format("Invalid XML {} skipped. {}", progress.getFields().getFieldValue("path"), e.getCause()).getMessage();
 			logger.error(msg, e);
 			throw new IndexingHandlerException(msg, e);
-		}
-		*/
-		
-		//f.addField(HandlerKeydef.FIELD_KEYDEF, result.toString());
-		
-		f.addField(HandlerKeydef.FIELD_KEYDEF, transform(is));
-	}
-	
-	public String transform(InputStream is) {
-		
-		TikaInputStream resource = TikaInputStream.get(is);
-		String filename = null;
-        String relationshipID = null;
-        String mediaType = null;
-		//XHTMLContentHandler xhtml = null;
-		boolean outputHtml = true;
-		
-		//handleEmbeddedResource(resource, filename, relationshipID, mediaType, xhtml, outputHtml);
-		
-		try {
-			String xhtml = parseToHTML(is);
-			
-			System.out.println(xhtml);
-			return xhtml;
-		} catch (Exception e) {
+		} catch (SaxonApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TikaException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		
+		f.addField(HandlerKeydef.FIELD_KEYDEF, result.toString());
 	}
 	
-	public void parseToSaxonTree() {
+	
+	public XmlSourceDocumentS9api parseToSaxonTree(InputStream is) throws SaxonApiException, IOException, SAXException, TikaException {
 		
-		//ContentHandler handler = DocumentBuilder.newBuildingContentHandler();
+		BuildingContentHandler handler = this.db.newBuildingContentHandler();
+		AutoDetectParser parser = new AutoDetectParser();
+	    Metadata metadata = new Metadata();
+	    parser.parse(is, handler, metadata);
 		
+	    XmlSourceDocumentS9api xmlDoc = new XmlSourceDocumentS9api(handler.getDocumentNode(), this.sourceReader.buildSourceElement(XmlSourceReaderS9api.getDocumentElement(handler.getDocumentNode())), null);
+	    return xmlDoc;
 	}
 	
 	public String parseToHTML(InputStream is) throws IOException, SAXException, TikaException {
