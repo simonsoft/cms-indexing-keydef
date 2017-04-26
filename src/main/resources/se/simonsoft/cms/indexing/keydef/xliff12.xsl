@@ -38,6 +38,7 @@
     <xsl:output omit-xml-declaration="yes" />
 
     <xsl:template match="xlf:xliff">
+        <!-- Indexing contains sequence of keydef elements, no root element (added by Editor/consumer if needed). -->
         <xsl:apply-templates select="//xlf:trans-unit">
             <xsl:with-param name="prefix" select="$prefix"/>
         </xsl:apply-templates>
