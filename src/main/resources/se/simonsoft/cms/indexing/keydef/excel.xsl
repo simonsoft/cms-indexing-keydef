@@ -50,7 +50,16 @@
         </xsl:if>
         <!-- TODO: Select sheet logic. -->
         <xsl:variable name="sheet" as="element(xhtml:div)">
-            <xsl:sequence select="xhtml:div[1]"/>
+            <xsl:choose>
+                <xsl:when test="xhtml:div[xhtml:h1/text() = $locale]">
+                    <xsl:sequence select="xhtml:div[xhtml:h1/text() = $locale][1]"/>
+                </xsl:when>
+                
+                <xsl:otherwise>
+                    <xsl:sequence select="xhtml:div[1]"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            
         </xsl:variable>
         
         
