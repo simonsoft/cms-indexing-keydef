@@ -19,6 +19,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -32,6 +34,7 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,60 +91,76 @@ public class HandlerKeydefExcel implements IndexingItemHandler {
 		InputStream is = progress.getContents();
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		
-		
+		Locale locale = Locale.US;
+		if (HandlerKeydef.getLocale(f) != null) {
+			locale = Locale.forLanguageTag(HandlerKeydef.getLocale(f));
+			logger.debug("Parsing Excel file with Java locale: {}", locale);
+		}
 		TransformOptions transformOptions = HandlerKeydef.getTransformOptions(f);
 		try {
-			//String test = parseToHTML(is);
-			//System.out.println(test);
-			//is = progress.getContents();
+			boolean debug = false;
+			if (debug) {
+				String test = parseToHTML(is, locale);
+				System.out.println(test);
+				is = progress.getContents();
+			}
 			
-			XmlSourceDocumentS9api xmlDoc = parseToSaxonTree(is);
+			XmlSourceDocumentS9api xmlDoc = parseToSaxonTree(is, locale);
 			
 			transformerService.transform(xmlDoc, new OutputStreamWriter(result), transformOptions);
 			System.out.println("Transformed result:");
 			System.out.println(result.toString());
 			
 		} catch (XmlNotWellFormedException e) { 
-			String msg = MessageFormatter.format("Invalid XML {} skipped. {}", progress.getFields().getFieldValue("path"), e.getCause()).getMessage();
+			String msg = MessageFormatter.format("Excel keydefmap extraction provided invalid XHTML {} - {}", progress.getFields().getFieldValue("path"), e.getCause()).getMessage();
 			logger.error(msg, e);
 			throw new IndexingHandlerException(msg, e);
 		} catch (SaxonApiException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String msg = MessageFormatter.format("Excel keydefmap extraction failed {} - {}", progress.getFields().getFieldValue("path"), e.getMessage()).getMessage();
+			logger.error(msg, e);
+			throw new IndexingHandlerException(msg, e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String msg = MessageFormatter.format("Excel keydefmap extraction failed {} - {}", progress.getFields().getFieldValue("path"), e.getMessage()).getMessage();
+			logger.error(msg, e);
+			throw new IndexingHandlerException(msg, e);
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String msg = MessageFormatter.format("Excel keydefmap extraction failed {} - {}", progress.getFields().getFieldValue("path"), e.getMessage()).getMessage();
+			logger.error(msg, e);
+			throw new IndexingHandlerException(msg, e);
 		} catch (TikaException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String msg = MessageFormatter.format("Excel keydefmap extraction failed {} - {}", progress.getFields().getFieldValue("path"), e.getMessage()).getMessage();
+			logger.error(msg, e);
+			throw new IndexingHandlerException(msg, e);
 		}
 		
 		f.addField(HandlerKeydef.FIELD_KEYDEF, result.toString());
 	}
 	
 	
-	public XmlSourceDocumentS9api parseToSaxonTree(InputStream is) throws SaxonApiException, IOException, SAXException, TikaException {
+	public XmlSourceDocumentS9api parseToSaxonTree(InputStream is, Locale locale) throws SaxonApiException, IOException, SAXException, TikaException {
 		
 		BuildingContentHandler handler = this.db.newBuildingContentHandler();
 		AutoDetectParser parser = new AutoDetectParser();
 	    Metadata metadata = new Metadata();
-	    parser.parse(is, handler, metadata);
+	    ParseContext context = new ParseContext();
+	    context.set(Locale.class, locale);
+	    
+	    parser.parse(is, handler, metadata, context);
 		
 	    XmlSourceDocumentS9api xmlDoc = new XmlSourceDocumentS9api(handler.getDocumentNode(), this.sourceReader.buildSourceElement(XmlSourceReaderS9api.getDocumentElement(handler.getDocumentNode())), null);
 	    return xmlDoc;
 	}
 	
-	public String parseToHTML(InputStream is) throws IOException, SAXException, TikaException {
+	public String parseToHTML(InputStream is, Locale locale) throws IOException, SAXException, TikaException {
 	    ContentHandler handler = new ToXMLContentHandler();
 	 
 	    AutoDetectParser parser = new AutoDetectParser();
 	    Metadata metadata = new Metadata();
+	    ParseContext context = new ParseContext();
+	    context.set(Locale.class, locale);
 	    
-	        parser.parse(is, handler, metadata);
-	        return handler.toString();
+	    parser.parse(is, handler, metadata, context);
+	    return handler.toString();
 	}
 	
 	@Override

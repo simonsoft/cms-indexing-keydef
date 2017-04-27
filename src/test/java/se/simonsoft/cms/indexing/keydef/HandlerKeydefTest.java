@@ -15,12 +15,13 @@
  */
 package se.simonsoft.cms.indexing.keydef;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import net.sf.saxon.s9api.Processor;
 
-import org.junit.Before;
+import org.apache.commons.lang.StringUtils;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import se.repos.indexing.IndexingDoc;
@@ -61,14 +62,25 @@ public class HandlerKeydefTest {
 		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1.xlsx");
 		item.getFields().addField("prop_cms.class", "keydefmap");
 		item.getFields().addField("pathext", "xlsx");
+		item.getFields().addField("prop_abx.lang", "sv-SE");
 		
 		keydef.handle(item);
 		IndexingDoc fields = item.getFields();
 
 		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
 
+		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
 		
-		assertTrue("Calculated cell", ((String)fields.getFieldValue("rel_tf_keydefmap")).contains("<td>10.24</td>"));
+		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
+		
+		assertTrue("Number format based on locale - decimal", keydefmap.contains("<keyword>3,2m</keyword>"));
+		assertFalse("Number format based on locale - 1000-separator normal space", keydefmap.contains("<keyword>6 000m</keyword>"));
+		assertTrue("Number format based on locale - 1000-separator NO-BREAK SPACE", keydefmap.contains("<keyword>6 000m</keyword>")); //Unicode: U+00A0, UTF-8: C2 A0
+		
+		assertTrue("Date as text is preserved", keydefmap.contains("<keyword>2016-02-01</keyword>"));
+		// The date format is not according to Locale with Tika 1.14.
+		
+		assertTrue("Calculated cell", keydefmap.contains("<keyword>10,24m²</keyword>"));
 	}
 	
 	

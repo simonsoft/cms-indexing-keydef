@@ -43,6 +43,19 @@ public abstract class HandlerKeydef {
 		return Arrays.asList(a).contains(name);
 	}
 	
+	public static String getLocale(IndexingDoc f) {
+		
+		String locale = null;
+		
+		if (f.containsKey("prop_abx.TranslationLocale")) {
+			locale = (String) f.getFieldValue("prop_abx.TranslationLocale");
+		} else if (f.containsKey("prop_abx.lang")) {
+			locale = (String) f.getFieldValue("prop_abx.lang");
+		}
+		
+		return locale;
+	}
+	
 	public static TransformOptions getTransformOptions(IndexingDoc f) {
 		
 		TransformOptions o = new TransformOptions();
@@ -51,15 +64,15 @@ public abstract class HandlerKeydef {
 			String patharea = (String) f.getFieldValue("patharea");
 			o.setParameter("patharea", patharea);
 		}
-		if (f.containsKey("prop_abx.TranslationLocale")) {
-			String locale = (String) f.getFieldValue("prop_abx.TranslationLocale");
-			o.setParameter("locale", locale);
-		}
-		
 		
 		if (f.containsKey("prop_keydefmap.prefix")) {
 			String prefix = (String) f.getFieldValue("prop_keydefmap.prefix");
 			o.setParameter("prefix", prefix);
+		}
+		
+		String locale = getLocale(f);
+		if (locale != null) {
+			o.setParameter("locale", locale);
 		}
 			
 		return o;
