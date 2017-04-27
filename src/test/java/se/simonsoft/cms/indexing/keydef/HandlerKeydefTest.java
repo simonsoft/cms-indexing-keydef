@@ -83,5 +83,49 @@ public class HandlerKeydefTest {
 		assertTrue("Calculated cell", keydefmap.contains("<keyword>10,24m²</keyword>"));
 	}
 	
+	@Test
+	public void testExcelColmissing1() {
+		HandlerKeydefExcel keydef = new HandlerKeydefExcel(sourceReader, tsf);
+
+		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1-colmissing1.xlsx");
+		item.getFields().addField("prop_cms.class", "keydefmap");
+		item.getFields().addField("pathext", "xlsx");
+		item.getFields().addField("prop_abx.lang", "sv-SE");
+		
+		keydef.handle(item);
+		IndexingDoc fields = item.getFields();
+
+		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
+
+		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
+		
+		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
+		
+		assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->"));
+		assertTrue(keydefmap.contains("<!--Incorrect column count: \"Broken \"-->"));
+	}
+	
+	@Test
+	public void testExcelColadded1() {
+		HandlerKeydefExcel keydef = new HandlerKeydefExcel(sourceReader, tsf);
+
+		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1-coladded1.xlsx");
+		item.getFields().addField("prop_cms.class", "keydefmap");
+		item.getFields().addField("pathext", "xlsx");
+		item.getFields().addField("prop_abx.lang", "sv-SE");
+		
+		keydef.handle(item);
+		IndexingDoc fields = item.getFields();
+
+		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
+
+		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
+		
+		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
+		
+		assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->"));
+		assertTrue(keydefmap.contains("<!--Incorrect column count: \"BrokenComment \"-->"));
+	}
+	
 	
 }

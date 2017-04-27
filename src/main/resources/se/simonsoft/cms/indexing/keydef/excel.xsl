@@ -71,7 +71,10 @@
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:value-of select="$newline"/>
                 <xsl:comment select="'Sheet failed column count validation.'"/>
+                <xsl:value-of select="$newline"/>
+                <xsl:comment select="indexfn:error-column-count(., 2, 3)"></xsl:comment>
             </xsl:otherwise>
         </xsl:choose>
         
@@ -125,9 +128,13 @@
         <xsl:param name="mincol"/>
         <xsl:param name="maxcol"/>
         
-        <xsl:variable name="rows" select="$sheet//xhtml:tr"/>
+        <xsl:variable name="rows" select="$sheet//xhtml:tr[count(xhtml:td) > $maxcol or $mincol > count(xhtml:td)]"/>
         
-        <xsl:sequence select="boolean($rows)"/>
+        <xsl:if test="$rows">
+            <xsl:message select="concat('Rows failing column count: ', count($rows))"></xsl:message>
+        </xsl:if>
+        
+        <xsl:sequence select="not(boolean($rows))"/>
     </xsl:function>
     
     <xsl:function name="indexfn:error-column-count" as="text()*">
@@ -135,10 +142,10 @@
         <xsl:param name="mincol"/>
         <xsl:param name="maxcol"/>
         
-        <xsl:variable name="rows" select="$sheet//xhtml:tr"/>
+        <xsl:variable name="rows" select="$sheet//xhtml:tr[count(xhtml:td) > $maxcol or $mincol > count(xhtml:td)]"/>
         
             <xsl:for-each select="$rows">
-                <xsl:value-of select="concat('Incorrect column count: ', ./xhtml:td/text()[1])"/>
+                <xsl:value-of select="concat('Incorrect column count: &quot;', ./xhtml:td[1]/text()[1]), '&quot;'"/>
             </xsl:for-each>
         
     </xsl:function>
