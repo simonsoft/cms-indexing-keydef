@@ -20,7 +20,6 @@ import java.util.Set;
 
 import se.repos.indexing.IndexingDoc;
 import se.repos.indexing.IndexingItemHandler;
-import se.repos.indexing.item.IndexingItemProgress;
 import se.simonsoft.cms.xmlsource.transform.TransformOptions;
 
 public abstract class HandlerKeydef {

@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Locale;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -31,7 +30,6 @@ import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.apache.tika.exception.TikaException;
-import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
@@ -48,7 +46,6 @@ import se.repos.indexing.IndexingItemHandler;
 import se.repos.indexing.item.IndexingItemProgress;
 import se.simonsoft.cms.xmlsource.handler.XmlNotWellFormedException;
 import se.simonsoft.cms.xmlsource.handler.s9api.XmlSourceDocumentS9api;
-import se.simonsoft.cms.xmlsource.handler.s9api.XmlSourceElementS9api;
 import se.simonsoft.cms.xmlsource.handler.s9api.XmlSourceReaderS9api;
 import se.simonsoft.cms.xmlsource.transform.TransformOptions;
 import se.simonsoft.cms.xmlsource.transform.TransformerService;

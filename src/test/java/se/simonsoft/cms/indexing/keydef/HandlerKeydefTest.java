@@ -34,6 +34,7 @@ import se.simonsoft.cms.xmlsource.transform.TransformerServiceFactory;
 
 public class HandlerKeydefTest {
 	
+	@SuppressWarnings("unused")
 	private static CmsRepository repo = new CmsRepository("http://cmshost/svn/repo");
 	private static Processor processor;
 	private static XmlSourceReaderS9api sourceReader;
