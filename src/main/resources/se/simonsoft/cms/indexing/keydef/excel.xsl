@@ -29,6 +29,7 @@
     <xsl:param name="patharea"/>
     <xsl:param name="locale"/>
     <xsl:param name="prefix" select="''"></xsl:param>
+    <xsl:param name="defaultSheet" select="'keydefmap'"></xsl:param>
     <xsl:param name="enableDescr" as="xs:boolean" select="false()"/>
     <xsl:param name="enableIDParentGroupPrefix" as="xs:boolean" select="true()"/>
     <xsl:param name="IDParentGroupSeparator" as="xs:string" select="'.'"></xsl:param>
@@ -53,6 +54,10 @@
             <xsl:choose>
                 <xsl:when test="xhtml:div[xhtml:h1/text() = $locale]">
                     <xsl:sequence select="xhtml:div[xhtml:h1/text() = $locale][1]"/>
+                </xsl:when>
+                
+                <xsl:when test="xhtml:div[xhtml:h1/text() = $defaultSheet]">
+                    <xsl:sequence select="xhtml:div[xhtml:h1/text() = $defaultSheet][1]"/>
                 </xsl:when>
                 
                 <xsl:otherwise>

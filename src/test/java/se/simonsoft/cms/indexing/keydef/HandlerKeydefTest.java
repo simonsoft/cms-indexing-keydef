@@ -159,5 +159,22 @@ public class HandlerKeydefTest {
 		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
 	}
 	
+	@Test
+	public void testExcelKeydefmap1() {
+		HandlerKeydefExcel keydef = new HandlerKeydefExcel(sourceReader, tsf);
+
+		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1-keydefmap1.xlsx");
+		item.getFields().addField("prop_cms.class", "keydefmap");
+		item.getFields().addField("pathext", "xlsx");
+		
+		
+		keydef.handle(item);
+		assertTrue("Should extract text", item.getFields().containsKey("rel_tf_keydefmap"));
+		String keydefmap = (String) item.getFields().getFieldValue("rel_tf_keydefmap");
+		
+		assertTrue(keydefmap.contains("<!--Transforming Excel sheet: \"keydefmap\"-->"));
+		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
+	}
+	
 	
 }
