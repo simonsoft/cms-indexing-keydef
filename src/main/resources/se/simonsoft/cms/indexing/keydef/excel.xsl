@@ -91,7 +91,7 @@
         </xsl:variable>
 
         <xsl:element name="keydef">
-            <xsl:attribute name="keys" select="translate(concat($prefix, $group-prefix, $key), '{}[]/#?', '.......')"/>
+            <xsl:attribute name="keys" select="indexfn:key-valid(concat($prefix, $group-prefix, $key))"/>
             <xsl:element name="topicmeta">
                 <xsl:if test="$enableDescr">
                     <!-- Not used in this transform. -->
@@ -147,7 +147,12 @@
             <xsl:for-each select="$rows">
                 <xsl:value-of select="concat('Incorrect column count: &quot;', ./xhtml:td[1]/text()[1]), '&quot;'"/>
             </xsl:for-each>
-        
+    </xsl:function>
+    
+    <xsl:function name="indexfn:key-valid" as="xs:string">
+        <xsl:param name="key"/>
+        <!-- Function copied btw keydefmap XSL files. -->
+        <xsl:value-of select="translate($key, ' {}[]/#?', '........')"/>
     </xsl:function>
 
 </xsl:stylesheet>

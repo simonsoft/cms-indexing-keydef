@@ -19,6 +19,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" 
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
+    xmlns:indexfn="http://www.simonsoft.se/namespace/cms-indexing-functions"
     xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2" 
     exclude-result-prefixes="xs" 
     version="2.0">
@@ -54,7 +55,7 @@
         </xsl:variable>
 
         <xsl:element name="keydef">
-            <xsl:attribute name="keys" select="translate(concat($prefix, $group-prefix, $key), '{}[]/#?', '.......')"/>
+            <xsl:attribute name="keys" select="indexfn:key-valid(concat($prefix, $group-prefix, $key))"/>
             <xsl:element name="topicmeta">
                 <xsl:if test="$enableDescr">
                     <xsl:apply-templates select="comment"/>
@@ -87,5 +88,11 @@
     <xsl:template match="text()" mode="keyword">
         <xsl:copy/>
     </xsl:template>
+    
+    <xsl:function name="indexfn:key-valid" as="xs:string">
+        <xsl:param name="key"/>
+        <!-- Function copied btw keydefmap XSL files. -->
+        <xsl:value-of select="translate($key, ' {}[]/#?', '........')"/>
+    </xsl:function>
 
 </xsl:stylesheet>
