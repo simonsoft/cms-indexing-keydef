@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<artifactId>cms-indexing-keydef</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<packaging>jar</packaging>
 	
 	<name>${project.artifactId}-${project.version}</name>
@@ -49,6 +49,12 @@
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
 			<version>1.14</version>
+			<exclusions>
+                <exclusion>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-rt-rs-client</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tika</groupId>
