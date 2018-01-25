@@ -18,8 +18,13 @@ package se.simonsoft.cms.indexing.keydef;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import net.sf.saxon.s9api.Processor;
 
+import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -176,5 +181,36 @@ public class HandlerKeydefTest {
 		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
 	}
 	
+	
+	@Test
+	public void testExcelLocaleParser() {
+		
+		// It is not known which part of Locale is actually used by Tika, see NumberFormatter and POI data formatter.
+		// java.text.DecimalFormatSymbols primarily uses getCountry().
+		assertEquals("", Locale.ENGLISH, Locale.forLanguageTag("en"));
+		assertEquals("", Locale.US, Locale.forLanguageTag("en-US"));
+		assertEquals("", new Locale.Builder().setLanguage("en").setRegion("GB").build(), Locale.forLanguageTag("en-GB"));
+		
+		assertEquals("", "sv", Locale.forLanguageTag("sv").toString());
+		assertEquals("", "sv_SE", Locale.forLanguageTag("sv-SE").toString());
+		assertEquals("Locale seems to prefer", "xyz", Locale.forLanguageTag("sv-XYZ").toString());
+		
+		assertEquals("", "deu_DE", Locale.forLanguageTag("deu-DE").toString());
+		assertEquals("", "DE", Locale.forLanguageTag("deu-DE").getCountry());
+		
+		assertEquals("Does not convert A-3 Code", "deu", Locale.forLanguageTag("deu").toString());
+		assertEquals("", "deu", Locale.forLanguageTag("DEU").toString());
+		
+		assertEquals("Does not convert A-3 Code", "deu", Locale.forLanguageTag("deu").getLanguage());
+		assertEquals("Does not convert A-3 Code", "", Locale.forLanguageTag("deu").getCountry());
+		
+		assertEquals("", "en_CN", Locale.forLanguageTag("en-CN").toString());
+		assertEquals("", "CN", Locale.forLanguageTag("en-CN").getCountry());
+		
+		assertEquals("", "eng_CN", Locale.forLanguageTag("eng-CN").toString());
+		assertEquals("", "CN", Locale.forLanguageTag("eng-CN").getCountry());
+	}
+	
+
 	
 }
