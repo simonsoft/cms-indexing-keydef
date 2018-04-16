@@ -192,6 +192,7 @@ public class HandlerKeydefTest {
 		assertEquals("", new Locale.Builder().setLanguage("en").setRegion("GB").build(), Locale.forLanguageTag("en-GB"));
 		
 		assertEquals("", "sv", Locale.forLanguageTag("sv").toString());
+		assertEquals("Only lang does not work for getCountry()", "", Locale.forLanguageTag("sv").getCountry());
 		assertEquals("", "sv_SE", Locale.forLanguageTag("sv-SE").toString());
 		assertEquals("Locale seems to prefer", "xyz", Locale.forLanguageTag("sv-XYZ").toString());
 		
@@ -209,6 +210,9 @@ public class HandlerKeydefTest {
 		
 		assertEquals("", "eng_CN", Locale.forLanguageTag("eng-CN").toString());
 		assertEquals("", "CN", Locale.forLanguageTag("eng-CN").getCountry());
+		
+		assertEquals("", "eng_US", Locale.forLanguageTag("eng-US").toString());
+		assertEquals("", "US", Locale.forLanguageTag("eng-US").getCountry());
 	}
 	
 

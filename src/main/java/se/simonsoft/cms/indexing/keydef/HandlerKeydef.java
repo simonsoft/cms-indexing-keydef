@@ -46,10 +46,11 @@ public abstract class HandlerKeydef {
 		
 		String locale = null;
 		
-		if (f.containsKey("prop_abx.lang")) {
-			locale = (String) f.getFieldValue("prop_abx.lang");
-		} else if (f.containsKey("prop_abx.TranslationLocale")) {
+		// TranslationLocale with fallback to abx:lang where the master locale can be set.
+		if (f.containsKey("prop_abx.TranslationLocale")) {
 			locale = (String) f.getFieldValue("prop_abx.TranslationLocale");
+		} else if (f.containsKey("prop_abx.lang")) {
+			locale = (String) f.getFieldValue("prop_abx.lang");
 		}
 		
 		return locale;
