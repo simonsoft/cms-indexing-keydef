@@ -56,6 +56,33 @@ public abstract class HandlerKeydef {
 		return locale;
 	}
 	
+	public static String getLocaleRfc(IndexingDoc f) {
+		
+		String locale = null;
+		
+		// TranslationLocale with fallback to abx:lang where the master locale can be set.
+		// The RFC variant of the properties take precedence.
+		if (f.containsKey("prop_abx.TranslationLocaleRfc")) {
+			locale = (String) f.getFieldValue("prop_abx.TranslationLocaleRfc");
+		} else if (f.containsKey("prop_abx.TranslationLocale")) {
+			locale = (String) f.getFieldValue("prop_abx.TranslationLocale");
+			
+		} else if (f.containsKey("prop_abx.ReleaseLocaleRfc")) {
+			locale = (String) f.getFieldValue("prop_abx.ReleaseLocaleRfc");
+		} else if (f.containsKey("prop_abx.ReleaseLocale")) {
+			locale = (String) f.getFieldValue("prop_abx.ReleaseLocale");
+			
+		} else if (f.containsKey("prop_cms.locale")) {
+			// Also looking at cms:locale as an RFC compliant override of abx:lang.
+			locale = (String) f.getFieldValue("prop_cms.locale");	
+		} else if (f.containsKey("prop_abx.lang")) {
+			locale = (String) f.getFieldValue("prop_abx.lang");
+		}
+		
+		return locale;
+	}
+	
+	
 	public static TransformOptions getTransformOptions(IndexingDoc f) {
 		
 		TransformOptions o = new TransformOptions();

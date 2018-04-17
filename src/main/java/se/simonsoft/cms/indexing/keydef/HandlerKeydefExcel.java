@@ -89,8 +89,8 @@ public class HandlerKeydefExcel implements IndexingItemHandler {
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		
 		Locale locale = Locale.US;
-		if (HandlerKeydef.getLocale(f) != null) {
-			locale = Locale.forLanguageTag(HandlerKeydef.getLocale(f));
+		if (HandlerKeydef.getLocaleRfc(f) != null) {
+			locale = Locale.forLanguageTag(HandlerKeydef.getLocaleRfc(f));
 			logger.debug("Parsing Excel file with Java locale: {}", locale);
 		}
 		TransformOptions transformOptions = HandlerKeydef.getTransformOptions(f);
@@ -105,8 +105,7 @@ public class HandlerKeydefExcel implements IndexingItemHandler {
 			XmlSourceDocumentS9api xmlDoc = parseToSaxonTree(is, locale);
 			
 			transformerService.transform(xmlDoc, new OutputStreamWriter(result), transformOptions);
-			System.out.println("Transformed result:");
-			System.out.println(result.toString());
+			logger.trace("KeydefExcel transformed result:\n{}", result);
 			
 		} catch (XmlNotWellFormedException e) { 
 			String msg = MessageFormatter.format("Excel keydefmap extraction provided invalid XHTML {} - {}", progress.getFields().getFieldValue("path"), e.getCause()).getMessage();
