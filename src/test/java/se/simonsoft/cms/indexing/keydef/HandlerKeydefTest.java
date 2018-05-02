@@ -19,16 +19,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.text.NumberFormat;
 import java.util.Locale;
 
-import net.sf.saxon.s9api.Processor;
-
-import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.sf.saxon.s9api.Processor;
 import se.repos.indexing.IndexingDoc;
 import se.repos.indexing.item.IndexingItemProgress;
 import se.repos.indexing.item.IndexingItemStandalone;
