@@ -105,7 +105,7 @@ public class HandlerKeydefTest {
 		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
 		assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->"));
-		assertTrue(keydefmap.contains("<!--Incorrect column count: \"Broken \"-->"));
+		assertTrue(keydefmap.contains("<!--Incorrect column count on row 6: \"Broken\"-->"));
 	}
 	
 	@Test
@@ -127,7 +127,7 @@ public class HandlerKeydefTest {
 		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
 		assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->"));
-		assertTrue(keydefmap.contains("<!--Incorrect column count: \"BrokenComment \"-->"));
+		assertTrue(keydefmap.contains("<!--Incorrect column count on row 6: \"BrokenComment|15|m|Some comment.\"-->"));
 	}
 	
 	@Test

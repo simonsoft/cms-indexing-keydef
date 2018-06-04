@@ -69,7 +69,9 @@
         
         
         
-        <xsl:comment select="concat('Transforming Excel sheet: &quot;', $sheet/xhtml:h1/text()[1], '&quot;')"/>
+        <xsl:variable name="msg" select="concat('Transforming Excel sheet: &quot;', $sheet/xhtml:h1/text()[1], '&quot;')"/>
+        <xsl:comment select="$msg"/>
+        <xsl:message select="$msg"/>
         
         <xsl:apply-templates select="$sheet" mode="excel-simple"/>
         
@@ -159,7 +161,11 @@
         <xsl:variable name="rows" select="$sheet//xhtml:tr[count(xhtml:td) > $maxcol or $mincol > count(xhtml:td)]"/>
         
             <xsl:for-each select="$rows">
-                <xsl:value-of select="concat('Incorrect column count: &quot;', ./xhtml:td[1]/text()[1]), '&quot;'"/>
+                <xsl:variable name="rowno" select="1 + count(preceding-sibling::xhtml:tr)"/>
+                <xsl:variable name="rowcontent" select="string-join(.//xhtml:td, '|')"/>
+                <xsl:variable name="msg" select="concat('Incorrect column count on row ', $rowno, ': &quot;', $rowcontent, '&quot;')"/>
+                <xsl:value-of select="$msg"/>
+                <xsl:message select="$msg"/>
             </xsl:for-each>
     </xsl:function>
     
