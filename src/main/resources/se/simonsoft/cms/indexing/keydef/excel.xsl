@@ -97,7 +97,7 @@
         
     </xsl:template>
 
-    <xsl:template match="xhtml:tr" mode="excel-simple">
+    <xsl:template match="xhtml:tr[xhtml:td]" mode="excel-simple">
         <xsl:param name="prefix"/>
         
         <xsl:variable name="key" select="xhtml:td[1]"/>
@@ -123,8 +123,12 @@
         <xsl:value-of select="$newline"/>
     </xsl:template>
     
-    <xsl:template match="xhtml:tr[1][xhtml:td[1]/text() = 'Key']" mode="excel-simple">
+    <xsl:template match="xhtml:tr[1][xhtml:td[1]/text() = 'Key']" mode="excel-simple" priority="100">
         <!-- Suppress header row if first column header is 'Key'. -->
+    </xsl:template>
+    
+    <xsl:template match="xhtml:tr" mode="excel-simple" priority="-1">
+        <xsl:message select="'Empty row, suppressing.'"></xsl:message>
     </xsl:template>
     
     
@@ -144,7 +148,7 @@
         <xsl:param name="mincol"/>
         <xsl:param name="maxcol"/>
         
-        <xsl:variable name="rows" select="$sheet//xhtml:tr[count(xhtml:td) > $maxcol or $mincol > count(xhtml:td)]"/>
+        <xsl:variable name="rows" select="$sheet//xhtml:tr[xhtml:td][count(xhtml:td) > $maxcol or $mincol > count(xhtml:td)]"/>
         
         <xsl:if test="$rows">
             <xsl:message select="concat('Rows failing column count: ', count($rows))"></xsl:message>
@@ -158,7 +162,7 @@
         <xsl:param name="mincol"/>
         <xsl:param name="maxcol"/>
         
-        <xsl:variable name="rows" select="$sheet//xhtml:tr[count(xhtml:td) > $maxcol or $mincol > count(xhtml:td)]"/>
+        <xsl:variable name="rows" select="$sheet//xhtml:tr[xhtml:td][count(xhtml:td) > $maxcol or $mincol > count(xhtml:td)]"/>
         
             <xsl:for-each select="$rows">
                 <xsl:variable name="rowno" select="1 + count(preceding-sibling::xhtml:tr)"/>
