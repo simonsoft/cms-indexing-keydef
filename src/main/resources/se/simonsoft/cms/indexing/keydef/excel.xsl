@@ -80,17 +80,17 @@
     <xsl:template match="xhtml:div" mode="excel-simple">
         
         <xsl:choose>
-            <xsl:when test="indexfn:validate-column-count(., 2, 3)">
-                <xsl:value-of select="$newline"/>
-                <xsl:apply-templates select=".//xhtml:tr" mode="#current">
-                    <xsl:with-param name="prefix" select="$prefix"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
+            <xsl:when test="not(indexfn:validate-column-count(., 2, 3))">
                 <xsl:value-of select="$newline"/>
                 <xsl:comment select="'Sheet failed column count validation.'"/>
                 <xsl:value-of select="$newline"/>
                 <xsl:comment select="indexfn:error-column-count(., 2, 3)"></xsl:comment>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$newline"/>
+                <xsl:apply-templates select=".//xhtml:tr" mode="#current">
+                    <xsl:with-param name="prefix" select="$prefix"/>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
         
@@ -134,12 +134,25 @@
     
     <xsl:template match="xhtml:td" mode="excel-simple">
         
-        <xsl:apply-templates/>
+        <xsl:apply-templates mode="keyword"/>
     </xsl:template>
     
     
     <xsl:template match="text()" mode="keyword">
         <xsl:copy/>
+    </xsl:template>
+    
+    <xsl:template match="text()[preceding-sibling::element()]" mode="keyword"  priority="100">
+        <!-- Suppressing the content of Excel comment / note. -->
+    </xsl:template>
+    
+    <xsl:template match="xhtml:br" mode="keyword" priority="100">
+        <xsl:message select="'Excel comment or note, suppressing.'"/>
+    </xsl:template>
+    
+    <xsl:template match="*" mode="keyword" priority="50">
+        <xsl:comment select="'Unknown element, suppressing.'"/>
+        <xsl:message select="'Unknown element, suppressing.'"/>
     </xsl:template>
     
     

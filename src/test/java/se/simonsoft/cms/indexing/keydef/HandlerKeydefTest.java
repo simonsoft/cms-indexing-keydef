@@ -130,6 +130,31 @@ public class HandlerKeydefTest {
 		assertTrue(keydefmap.contains("<!--Incorrect column count on row 6: \"BrokenComment|15|m|Some comment.\"-->"));
 	}
 	
+	
+	@Test
+	public void testExcelComment1() {
+		HandlerKeydefExcel keydef = new HandlerKeydefExcel(sourceReader, tsf);
+
+		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1-comment1.xlsx");
+		item.getFields().addField("prop_cms.class", "keydefmap");
+		item.getFields().addField("pathext", "xlsx");
+		item.getFields().addField("prop_abx.lang", "sv-SE");
+		
+		keydef.handle(item);
+		IndexingDoc fields = item.getFields();
+
+		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
+
+		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
+		
+		System.out.println(keydefmap);
+		
+		assertEquals("Number of keydef, now suppressing comments so this can be extracted.", 6, StringUtils.countMatches(keydefmap, "<keydef keys="));
+		
+		assertTrue(keydefmap.contains("<keydef keys=\"OfficeComment\"><topicmeta><keywords><keyword>15m</keyword></keywords></topicmeta></keydef>"));
+		assertTrue(keydefmap.contains("<keydef keys=\"OfficeNote\"><topicmeta><keywords><keyword>10,24m²</keyword></keywords></topicmeta></keydef>"));
+	}
+	
 	@Test
 	public void testExcelLang1() {
 		HandlerKeydefExcel keydef = new HandlerKeydefExcel(sourceReader, tsf);
@@ -142,7 +167,6 @@ public class HandlerKeydefTest {
 
 		assertTrue("Should extract text", item.getFields().containsKey("rel_tf_keydefmap"));
 		String keydefmap = (String) item.getFields().getFieldValue("rel_tf_keydefmap");
-	
 		
 		assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->"));
 		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
