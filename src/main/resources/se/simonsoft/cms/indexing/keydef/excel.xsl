@@ -100,7 +100,10 @@
     <xsl:template match="xhtml:tr[xhtml:td]" mode="excel-simple">
         <xsl:param name="prefix"/>
         
-        <xsl:variable name="key" select="xhtml:td[1]"/>
+        <xsl:variable name="key">
+            <!-- Ensure comments / notes are suppressed. -->
+            <xsl:apply-templates select="xhtml:td[1]" mode="#current"/>
+        </xsl:variable>
         <xsl:variable name="group-prefix">
             <!-- Not used in this transform. -->
             <xsl:value-of select="''"/>

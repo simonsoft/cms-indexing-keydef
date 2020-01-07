@@ -147,9 +147,9 @@ public class HandlerKeydefTest {
 
 		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
 		
-		System.out.println(keydefmap);
+		//System.out.println(keydefmap);
 		
-		assertEquals("Number of keydef, now suppressing comments so this can be extracted.", 6, StringUtils.countMatches(keydefmap, "<keydef keys="));
+		assertEquals("Number of keydef, now suppressing comments so this can be extracted.", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
 		assertTrue(keydefmap.contains("<keydef keys=\"OfficeComment\"><topicmeta><keywords><keyword>15m</keyword></keywords></topicmeta></keydef>"));
 		assertTrue(keydefmap.contains("<keydef keys=\"OfficeNote\"><topicmeta><keywords><keyword>10,24m²</keyword></keywords></topicmeta></keydef>"));
