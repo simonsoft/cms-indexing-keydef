@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<artifactId>cms-indexing-keydef</artifactId>
-	<version>0.2.2-SNAPSHOT</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<name>${project.artifactId}-${project.version}</name>
@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>se.simonsoft</groupId>
 		<artifactId>cms-maven-parent</artifactId>
-		<version>4.1.1</version>
+		<version>8.0.1</version>
 		<relativePath/>
 	</parent>
 
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-xmp</artifactId>
-			<version>1.14</version>
+			<version>1.23</version>
 		</dependency>
 		<!-- logging backend for unit tests: log debug and above to console, no need for config file -->
 		<dependency>
