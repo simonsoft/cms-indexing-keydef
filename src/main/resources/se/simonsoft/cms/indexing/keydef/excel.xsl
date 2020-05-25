@@ -80,17 +80,21 @@
     <xsl:template match="xhtml:div" mode="excel-simple">
         
         <xsl:choose>
-            <xsl:when test="indexfn:validate-column-count(., 2, 3)">
-                <xsl:value-of select="$newline"/>
-                <xsl:apply-templates select=".//xhtml:tr" mode="#current">
-                    <xsl:with-param name="prefix" select="$prefix"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
+            <xsl:when test="not(indexfn:validate-column-count(., 2, 3))">
                 <xsl:value-of select="$newline"/>
                 <xsl:comment select="'Sheet failed column count validation.'"/>
                 <xsl:value-of select="$newline"/>
                 <xsl:comment select="indexfn:error-column-count(., 2, 3)"></xsl:comment>
+            </xsl:when>
+            <xsl:when test="not(indexfn:validate-keys(.))">
+                <xsl:value-of select="$newline"/>
+                <xsl:comment select="'Sheet failed empty key validation.'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$newline"/>
+                <xsl:apply-templates select=".//xhtml:tr" mode="#current">
+                    <xsl:with-param name="prefix" select="$prefix"/>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
         
@@ -100,7 +104,10 @@
     <xsl:template match="xhtml:tr[xhtml:td]" mode="excel-simple">
         <xsl:param name="prefix"/>
         
-        <xsl:variable name="key" select="xhtml:td[1]"/>
+        <xsl:variable name="key">
+            <!-- Ensure comments / notes are suppressed. -->
+            <xsl:apply-templates select="xhtml:td[1]" mode="#current"/>
+        </xsl:variable>
         <xsl:variable name="group-prefix">
             <!-- Not used in this transform. -->
             <xsl:value-of select="''"/>
@@ -134,12 +141,25 @@
     
     <xsl:template match="xhtml:td" mode="excel-simple">
         
-        <xsl:apply-templates/>
+        <xsl:apply-templates mode="keyword"/>
     </xsl:template>
     
     
     <xsl:template match="text()" mode="keyword">
         <xsl:copy/>
+    </xsl:template>
+    
+    <xsl:template match="text()[preceding-sibling::element()]" mode="keyword"  priority="100">
+        <!-- Suppressing the content of Excel comment / note. -->
+    </xsl:template>
+    
+    <xsl:template match="xhtml:br" mode="keyword" priority="100">
+        <xsl:message select="'Excel comment or note, suppressing.'"/>
+    </xsl:template>
+    
+    <xsl:template match="*" mode="keyword" priority="50">
+        <xsl:comment select="'Unknown element, suppressing.'"/>
+        <xsl:message select="'Unknown element, suppressing.'"/>
     </xsl:template>
     
     
@@ -171,6 +191,18 @@
                 <xsl:value-of select="$msg"/>
                 <xsl:message select="$msg"/>
             </xsl:for-each>
+    </xsl:function>
+    
+    <xsl:function name="indexfn:validate-keys" as="xs:boolean">
+        <xsl:param name="sheet" as="element()"/>
+        
+        <xsl:variable name="rows" select="$sheet//xhtml:tr[xhtml:td][string-length(xhtml:td[1]) = 0]"/>
+        
+        <xsl:if test="$rows">
+            <xsl:message select="concat('Rows failing key empty: ', count($rows))"></xsl:message>
+        </xsl:if>
+        
+        <xsl:sequence select="not(boolean($rows))"/>
     </xsl:function>
     
     <xsl:function name="indexfn:key-valid" as="xs:string">
