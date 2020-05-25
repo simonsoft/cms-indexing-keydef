@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -168,7 +168,9 @@ public class HandlerKeydefTest {
 		assertTrue("Should extract text", item.getFields().containsKey("rel_tf_keydefmap"));
 		String keydefmap = (String) item.getFields().getFieldValue("rel_tf_keydefmap");
 		
-		assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->"));
+		//assertEquals("", keydefmap);
+		//assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->")); // Tika 1.14
+		assertTrue(keydefmap.contains("<!--Sheet failed empty key validation.-->")); // Tika 1.23
 		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
 		

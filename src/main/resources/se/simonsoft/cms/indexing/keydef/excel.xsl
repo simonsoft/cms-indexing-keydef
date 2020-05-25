@@ -86,6 +86,10 @@
                 <xsl:value-of select="$newline"/>
                 <xsl:comment select="indexfn:error-column-count(., 2, 3)"></xsl:comment>
             </xsl:when>
+            <xsl:when test="not(indexfn:validate-keys(.))">
+                <xsl:value-of select="$newline"/>
+                <xsl:comment select="'Sheet failed empty key validation.'"/>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$newline"/>
                 <xsl:apply-templates select=".//xhtml:tr" mode="#current">
@@ -187,6 +191,18 @@
                 <xsl:value-of select="$msg"/>
                 <xsl:message select="$msg"/>
             </xsl:for-each>
+    </xsl:function>
+    
+    <xsl:function name="indexfn:validate-keys" as="xs:boolean">
+        <xsl:param name="sheet" as="element()"/>
+        
+        <xsl:variable name="rows" select="$sheet//xhtml:tr[xhtml:td][string-length(xhtml:td[1]) = 0]"/>
+        
+        <xsl:if test="$rows">
+            <xsl:message select="concat('Rows failing key empty: ', count($rows))"></xsl:message>
+        </xsl:if>
+        
+        <xsl:sequence select="not(boolean($rows))"/>
     </xsl:function>
     
     <xsl:function name="indexfn:key-valid" as="xs:string">
