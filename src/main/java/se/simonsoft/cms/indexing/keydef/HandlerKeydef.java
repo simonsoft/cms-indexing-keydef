@@ -25,6 +25,7 @@ import se.simonsoft.cms.xmlsource.transform.TransformOptions;
 public abstract class HandlerKeydef {
 	
 	public static final String FIELD_KEYDEF = "tf_keydefmap";
+	public static final String FIELD_TIKAHTML = "tf_tikahtml";
 
 	public HandlerKeydef() {
 

@@ -17,6 +17,7 @@ package se.simonsoft.cms.indexing.keydef;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
@@ -238,6 +239,29 @@ public class HandlerKeydefTest {
 		assertEquals("", "US", Locale.forLanguageTag("eng-US").getCountry());
 	}
 	
+	@Test
+	public void testTika1() {
+		HandlerTransformTika handler = new HandlerTransformTika();
 
+		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1.xlsx");
+		item.getFields().addField("prop_cms.class", "tikahtml");
+		item.getFields().addField("pathext", "xlsx");
+		item.getFields().addField("prop_abx.lang", "sv-SE");
+		
+		handler.handle(item);
+		IndexingDoc fields = item.getFields();
+
+		assertTrue("Should extract text", fields.containsKey("tf_tikahtml"));
+
+		String tikahtml = (String) fields.getFieldValue("tf_tikahtml");
+		assertNotNull(tikahtml);
+		
+		//assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(tikahtml, "<keydef keys="));
+		
+		
+		//assertEquals("", tikahtml);
+		assertEquals("Must be XML compliant HTML", "<html xmlns=\"http://www.w3.org/1999/xhtml\">", tikahtml.substring(0, tikahtml.indexOf('\n')));
+		// TODO: Verify parsing with Saxon.
+	}
 	
 }
