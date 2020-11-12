@@ -70,9 +70,9 @@ public class HandlerKeydefTest {
 		keydef.handle(item);
 		IndexingDoc fields = item.getFields();
 
-		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
+		assertTrue("Should extract text", fields.containsKey("tf_keydefmap"));
 
-		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
+		String keydefmap = (String) fields.getFieldValue("tf_keydefmap");
 		
 		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
@@ -98,9 +98,9 @@ public class HandlerKeydefTest {
 		keydef.handle(item);
 		IndexingDoc fields = item.getFields();
 
-		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
+		assertTrue("Should extract text", fields.containsKey("tf_keydefmap"));
 
-		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
+		String keydefmap = (String) fields.getFieldValue("tf_keydefmap");
 		
 		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
@@ -120,9 +120,9 @@ public class HandlerKeydefTest {
 		keydef.handle(item);
 		IndexingDoc fields = item.getFields();
 
-		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
+		assertTrue("Should extract text", fields.containsKey("tf_keydefmap"));
 
-		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
+		String keydefmap = (String) fields.getFieldValue("tf_keydefmap");
 		
 		assertEquals("Number of keydef, validation failure result in none", 0, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
@@ -143,9 +143,9 @@ public class HandlerKeydefTest {
 		keydef.handle(item);
 		IndexingDoc fields = item.getFields();
 
-		assertTrue("Should extract text", fields.containsKey("rel_tf_keydefmap"));
+		assertTrue("Should extract text", fields.containsKey("tf_keydefmap"));
 
-		String keydefmap = (String) fields.getFieldValue("rel_tf_keydefmap");
+		String keydefmap = (String) fields.getFieldValue("tf_keydefmap");
 		
 		//System.out.println(keydefmap);
 		
@@ -165,8 +165,8 @@ public class HandlerKeydefTest {
 		
 		keydef.handle(item);
 
-		assertTrue("Should extract text", item.getFields().containsKey("rel_tf_keydefmap"));
-		String keydefmap = (String) item.getFields().getFieldValue("rel_tf_keydefmap");
+		assertTrue("Should extract text", item.getFields().containsKey("tf_keydefmap"));
+		String keydefmap = (String) item.getFields().getFieldValue("tf_keydefmap");
 		
 		//assertEquals("", keydefmap);
 		//assertTrue(keydefmap.contains("<!--Sheet failed column count validation.-->")); // Tika 1.14
@@ -180,8 +180,8 @@ public class HandlerKeydefTest {
 		item.getFields().addField("prop_abx.lang", "sv-SE");
 		
 		keydef.handle(item);
-		assertTrue("Should extract text", item.getFields().containsKey("rel_tf_keydefmap"));
-		keydefmap = (String) item.getFields().getFieldValue("rel_tf_keydefmap");
+		assertTrue("Should extract text", item.getFields().containsKey("tf_keydefmap"));
+		keydefmap = (String) item.getFields().getFieldValue("tf_keydefmap");
 		
 		assertTrue(keydefmap.contains("<!--Transforming Excel sheet: \"sv-SE\"-->"));
 		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
@@ -197,8 +197,8 @@ public class HandlerKeydefTest {
 		
 		
 		keydef.handle(item);
-		assertTrue("Should extract text", item.getFields().containsKey("rel_tf_keydefmap"));
-		String keydefmap = (String) item.getFields().getFieldValue("rel_tf_keydefmap");
+		assertTrue("Should extract text", item.getFields().containsKey("tf_keydefmap"));
+		String keydefmap = (String) item.getFields().getFieldValue("tf_keydefmap");
 		
 		assertTrue(keydefmap.contains("<!--Transforming Excel sheet: \"keydefmap\"-->"));
 		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
