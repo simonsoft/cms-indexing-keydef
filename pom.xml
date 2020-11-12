@@ -29,12 +29,12 @@
 		<dependency>
 			<groupId>se.repos</groupId>
 			<artifactId>repos-indexing</artifactId>
-			<version>0.14.0-SNAPSHOT</version>
+			<version>0.20.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>se.simonsoft</groupId>
 			<artifactId>cms-xmlsource</artifactId>
-			<version>0.18.3</version>
+			<version>0.20.0-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>jdom2</artifactId>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
-			<version>1.23</version>
+			<version>1.24.1</version>
 			<exclusions>
                 <exclusion>
                     <groupId>org.apache.cxf</groupId>
@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-xmp</artifactId>
-			<version>1.23</version>
+			<version>1.24.1</version>
 		</dependency>
 		<!-- logging backend for unit tests: log debug and above to console, no need for config file -->
 		<dependency>
