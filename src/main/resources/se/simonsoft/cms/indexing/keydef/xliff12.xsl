@@ -22,7 +22,7 @@
     xmlns:indexfn="http://www.simonsoft.se/namespace/cms-indexing-functions"
     xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2" 
     exclude-result-prefixes="xs" 
-    version="2.0">
+    version="3.0">
 
     <!-- NOTE: Adjust the xlf namespace above to match the source files. Have tested 1.1 and 1.2. -->
 

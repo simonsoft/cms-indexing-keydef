@@ -22,7 +22,7 @@
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:indexfn="http://www.simonsoft.se/namespace/cms-indexing-functions"
     exclude-result-prefixes="xs" 
-    version="2.0">
+    version="3.0">
 
 
 
