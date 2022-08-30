@@ -26,6 +26,7 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.microsoft.OfficeParserConfig;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +108,14 @@ public class HandlerTransformTika implements IndexingItemHandler {
 	    AutoDetectParser parser = new AutoDetectParser();
 	    Metadata metadata = new Metadata();
 	    ParseContext context = new ParseContext();
+	    
 	    context.set(Locale.class, locale);
+	    
+	    // Experimenting with the new SAX parser for DOCX / PPTX (should not impact search indexing).
+	    OfficeParserConfig officeParserConfig = new OfficeParserConfig();
+	    officeParserConfig.setUseSAXDocxExtractor(true);
+	    officeParserConfig.setUseSAXPptxExtractor(true);
+	    context.set(OfficeParserConfig.class, officeParserConfig);
 	    
 	    parser.parse(is, handler, metadata, context);
 	    return handler.toString();
