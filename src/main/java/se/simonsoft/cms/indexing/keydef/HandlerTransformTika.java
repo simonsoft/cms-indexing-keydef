@@ -112,10 +112,13 @@ public class HandlerTransformTika implements IndexingItemHandler {
 	    context.set(Locale.class, locale);
 	    
 	    // Experimenting with the new SAX parser for DOCX / PPTX (should not impact search indexing).
+	    // Keeping the original DOM parser for now, the SAX parser does not handle tables well (Tika 1.25).
+	    /*
 	    OfficeParserConfig officeParserConfig = new OfficeParserConfig();
 	    officeParserConfig.setUseSAXDocxExtractor(true);
 	    officeParserConfig.setUseSAXPptxExtractor(true);
 	    context.set(OfficeParserConfig.class, officeParserConfig);
+	    */
 	    
 	    parser.parse(is, handler, metadata, context);
 	    return handler.toString();
