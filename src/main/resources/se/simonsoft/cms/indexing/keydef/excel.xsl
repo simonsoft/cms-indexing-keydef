@@ -31,6 +31,8 @@
     <xsl:param name="prefix" select="''"></xsl:param>
     <xsl:param name="defaultSheet" select="'keydefmap'"></xsl:param>
     <xsl:param name="enableDescr" as="xs:boolean" select="false()"/>
+    <xsl:param name="enableDita1X" as="xs:boolean" select="false()"/>
+    <xsl:param name="enableDita20" as="xs:boolean" select="false()"/>
     <xsl:param name="enableIDParentGroupPrefix" as="xs:boolean" select="true()"/>
     <xsl:param name="IDParentGroupSeparator" as="xs:string" select="'.'"></xsl:param>
     
@@ -120,11 +122,18 @@
                     <!-- Not used in this transform. -->
                     <xsl:apply-templates select="comment"/>
                 </xsl:if>
-                <xsl:element name="keywords">
-                    <xsl:element name="keyword">
+                <xsl:if test="$enableDita20">
+                    <xsl:element name="keytext">
                         <xsl:apply-templates select="xhtml:td[2]|xhtml:td[3]" mode="#current"/>
                     </xsl:element>
-                </xsl:element>
+                </xsl:if>
+                <xsl:if test="$enableDita1X">
+	                <xsl:element name="keywords">
+	                    <xsl:element name="keyword">
+	                        <xsl:apply-templates select="xhtml:td[2]|xhtml:td[3]" mode="#current"/>
+	                    </xsl:element>
+	                </xsl:element>
+                </xsl:if>
             </xsl:element>
         </xsl:element>
         <xsl:value-of select="$newline"/>

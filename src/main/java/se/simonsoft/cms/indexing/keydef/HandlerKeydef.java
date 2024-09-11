@@ -38,9 +38,9 @@ public abstract class HandlerKeydef {
 		if (itemClass == null) {
 			return false;
 		}
-		String[] a = itemClass.split(" ");
+		String[] a = itemClass.toLowerCase().split(" ");
 		
-		return Arrays.asList(a).contains(name);
+		return Arrays.asList(a).contains(name.toLowerCase());
 	}
 	
 	public static String getLocale(IndexingDoc f) {
@@ -101,6 +101,16 @@ public abstract class HandlerKeydef {
 		String locale = getLocale(f);
 		if (locale != null) {
 			o.setParameter("locale", locale);
+		}
+		
+		if (HandlerKeydef.isCmsClass(f, "dita1x")) {
+			o.setParameter("enableDita1X", true);
+		} 
+		if (HandlerKeydef.isCmsClass(f, "dita20")) {
+			o.setParameter("enableDita20", true);
+		}
+		if (!HandlerKeydef.isCmsClass(f, "dita1x") && !HandlerKeydef.isCmsClass(f, "dita20")) {
+			o.setParameter("enableDita1X", true); // Default remains Dita 1.X during CMS 5.2.
 		}
 			
 		return o;
