@@ -77,14 +77,14 @@ public class HandlerKeydefTest {
 		
 		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
-		assertTrue("Number format based on locale - decimal", keydefmap.contains("<keyword>3,2m</keyword>"));
-		assertFalse("Number format based on locale - 1000-separator normal space", keydefmap.contains("<keyword>6 000m</keyword>"));
-		assertTrue("Number format based on locale - 1000-separator NO-BREAK SPACE", keydefmap.contains("<keyword>6 000m</keyword>")); //Unicode: U+00A0, UTF-8: C2 A0
+		assertTrue("Number format based on locale - decimal", keydefmap.contains("<keytext>3,2m</keytext>"));
+		assertFalse("Number format based on locale - 1000-separator normal space", keydefmap.contains("<keytext>6 000m</keytext>"));
+		assertTrue("Number format based on locale - 1000-separator NO-BREAK SPACE", keydefmap.contains("<keytext>6 000m</keytext>")); //Unicode: U+00A0, UTF-8: C2 A0
 		
-		assertTrue("Date as text is preserved", keydefmap.contains("<keyword>2016-02-01</keyword>"));
+		assertTrue("Date as text is preserved", keydefmap.contains("<keytext>2016-02-01</keytext>"));
 		// The date format is not according to Locale with Tika 1.14.
 		
-		assertTrue("Calculated cell", keydefmap.contains("<keyword>10,24m²</keyword>"));
+		assertTrue("Calculated cell", keydefmap.contains("<keytext>10,24m²</keytext>"));
 	}
 	
 	@Test
@@ -152,8 +152,8 @@ public class HandlerKeydefTest {
 		
 		assertEquals("Number of keydef, now suppressing comments so this can be extracted.", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
 		
-		assertTrue(keydefmap.contains("<keydef keys=\"OfficeComment\"><topicmeta><keywords><keyword>15m</keyword></keywords></topicmeta></keydef>"));
-		assertTrue(keydefmap.contains("<keydef keys=\"OfficeNote\"><topicmeta><keywords><keyword>10,24m²</keyword></keywords></topicmeta></keydef>"));
+		assertTrue(keydefmap.contains("<keydef keys=\"OfficeComment\"><topicmeta><keytext>15m</keytext></topicmeta></keydef>"));
+		assertTrue(keydefmap.contains("<keydef keys=\"OfficeNote\"><topicmeta><keytext>10,24m²</keytext></topicmeta></keydef>"));
 	}
 	
 	@Test
