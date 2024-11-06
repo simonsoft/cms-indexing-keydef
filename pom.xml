@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<artifactId>cms-indexing-keydef</artifactId>
-	<version>0.4.3-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<name>${project.artifactId}-${project.version}</name>
@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>se.simonsoft</groupId>
 			<artifactId>cms-xmlsource</artifactId>
-			<version>0.21.2</version>
+			<version>0.22-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>jdom2</artifactId>
