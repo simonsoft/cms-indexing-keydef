@@ -110,7 +110,7 @@ public abstract class HandlerKeydef {
 			o.setParameter("enableDita20", true);
 		}
 		if (!HandlerKeydef.isCmsClass(f, "dita1x") && !HandlerKeydef.isCmsClass(f, "dita20")) {
-			o.setParameter("enableDita1X", true); // Default remains Dita 1.X during CMS 5.2.
+			o.setParameter("enableDita20", true); // Default updated to Dita 2.0 in CMS 5.3.
 		}
 			
 		return o;
