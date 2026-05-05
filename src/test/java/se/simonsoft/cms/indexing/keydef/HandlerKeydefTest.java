@@ -207,6 +207,32 @@ public class HandlerKeydefTest {
 	
 	
 	@Test
+	public void testExcel1MultipleKey() {
+		HandlerKeydefExcel keydef = new HandlerKeydefExcel(sourceReader, tsf);
+
+		IndexingItemProgress item = new IndexingItemStandalone("se/simonsoft/cms/indexing/keydef/Techdata1-multiplekey.xlsx");
+		item.getFields().addField("prop_cms.class", "keydefmap");
+		item.getFields().addField("prop_keydefmap.prefix", "xl-");
+		item.getFields().addField("pathext", "xlsx");
+		item.getFields().addField("prop_abx.lang", "sv-SE");
+		
+		keydef.handle(item);
+		IndexingDoc fields = item.getFields();
+
+		assertTrue("Should extract text", fields.containsKey("tf_keydefmap"));
+
+		String keydefmap = (String) fields.getFieldValue("tf_keydefmap");
+		
+		assertEquals("Number of keydef, suppress header row", 7, StringUtils.countMatches(keydefmap, "<keydef keys="));
+		
+		assertTrue("Number format based on locale - decimal", keydefmap.contains("<keytext>3,2m</keytext>"));
+		
+		assertTrue("Multiple keys, each with prefix", keydefmap.contains("<keydef keys=\"xl-DeprecatedLength xl-Length\">"));
+		//assertEquals("", keydefmap);
+	}
+	
+	
+	@Test
 	public void testExcelLocaleParser() {
 		
 		// It is not known which part of Locale is actually used by Tika, see NumberFormatter and POI data formatter.
