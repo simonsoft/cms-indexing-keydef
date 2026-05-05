@@ -228,6 +228,8 @@ public class HandlerKeydefTest {
 		assertTrue("Number format based on locale - decimal", keydefmap.contains("<keytext>3,2m</keytext>"));
 		
 		assertTrue("Multiple keys, each with prefix", keydefmap.contains("<keydef keys=\"xl-DeprecatedLength xl-Length\">"));
+		assertTrue("Multiple keys, trim space", keydefmap.contains("<keydef keys=\"xl-WorkWidth\">"));
+		assertTrue("Multiple keys, trim space", keydefmap.contains("<keydef keys=\"xl-TransportWidth\">"));
 		//assertEquals("", keydefmap);
 	}
 	
