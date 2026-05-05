@@ -116,7 +116,7 @@
         </xsl:variable>
 
         <xsl:element name="keydef">
-            <xsl:attribute name="keys" select="indexfn:key-valid(concat($prefix, $group-prefix, $key))"/>
+            <xsl:attribute name="keys" select="for $i in tokenize(normalize-space($key), ' ') return indexfn:key-valid(concat($prefix, $group-prefix, $i))"/>
             <xsl:element name="topicmeta">
                 <xsl:if test="$enableDescr">
                     <!-- Not used in this transform. -->
